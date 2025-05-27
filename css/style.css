@@ -1,0 +1,18 @@
+#reset-background {
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+#reset-background:hover {
+    transform: rotate(180deg);
+}
+
+#reset-background .control-icon {
+    width: 20px;
+    height: 20px;
+    filter: var(--icon-filter);
+}
+
+#reset-background.active .control-icon {
+    filter: var(--accent-filter);
+} 

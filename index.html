@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audiofloat</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+</head>
+<body>
+    <div class="audio-player">
+        <canvas id="visualizer"></canvas>
+        <div class="top-left-controls">
+            <button id="settings-btn" class="control-btn">
+                <img src="icons/darkPurple/setting.png" alt="Settings" class="control-icon">
+            </button>
+            <button id="pin-btn" class="control-btn">
+                <img src="icons/darkPurple/pin.png" alt="Pin" class="control-icon">
+            </button>
+            <button id="reset-btn" class="control-btn">
+                <img src="icons/darkPurple/reset.png" alt="Reset" class="control-icon">
+            </button>
+        </div>
+        <div class="next-track">
+            <span class="next-label">Next:</span>
+            <div class="next-title-container">
+            <span class="next-title"></span>
+            </div>
+        </div>
+        <div class="track-info">
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">Loading...</div>
+            </div>
+            <div class="track-title"></div>
+            <div class="track-artist"></div>
+            <div class="file-type"></div>
+            <div class="subtitle-container">
+                <div class="subtitle-text"></div>
+            </div>
+            <div class="listening-history">
+                <div class="last-listened"></div>
+                <div class="last-position"></div>
+            </div>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+            <div class="time-info">
+                <span class="current-time">0:00</span>
+                <span class="total-time">0:00</span>
+            </div>
+        </div>
+        <div class="player-controls">
+            <div class="main-controls">
+                <button id="shuffle-btn" class="control-btn">
+                    <img src="icons/darkPurple/shuffle.png" alt="Shuffle" class="control-icon">
+                </button>
+                <button id="prev-btn" class="control-btn">
+                    <img src="icons/darkPurple/rewind.png" alt="Previous" class="control-icon">
+                </button>
+                <button id="play-btn" class="control-btn">
+                    <img src="icons/darkPurple/play.png" alt="Play" class="control-icon">
+                </button>
+                <button id="next-btn" class="control-btn">
+                    <img src="icons/darkPurple/fastforward.png" alt="Next" class="control-icon">
+                </button>
+                <button id="loop-btn" class="control-btn">
+                    <img src="icons/darkPurple/loop.png" alt="Loop" class="control-icon">
+                </button>
+            </div>
+            <div class="volume-controls">
+                <button id="mute-btn" class="control-btn">
+                    <img src="icons/darkPurple/volume.png" alt="Volume" class="control-icon">
+                </button>
+                <input type="range" id="volume-slider" min="0" max="100" value="100">
+                <button id="subtitle-btn" class="control-btn">
+                    <img src="icons/darkPurple/transcription.png" alt="Subtitles" class="control-icon">
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <h2>Settings</h2>
+            <div class="settings-section">
+                <h3>Loading Animation</h3>
+                <div class="setting-item">
+                    <label for="spiral-thickness">Spiral Line Thickness</label>
+                    <input type="range" id="spiral-thickness" min="1" max="10" step="0.1" value="2.5">
+                    <span id="spiral-thickness-value">2.5</span>
+                </div>
+                <div class="setting-item">
+                    <label for="spiral-speed">Spiral Animation Speed</label>
+                    <input type="range" id="spiral-speed" min="2000" max="12000" step="100" value="6000">
+                    <span id="spiral-speed-value">6000</span>
+                </div>
+                <div class="setting-item">
+                    <label for="spiral-segment">Spiral Segment Length</label>
+                    <input type="range" id="spiral-segment" min="0.1" max="0.9" step="0.01" value="0.45">
+                    <span id="spiral-segment-value">45</span>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3>Visualizer</h3>
+                <div class="setting-item">
+                    <label for="visualizer-style">Visualizer Style</label>
+                    <select id="visualizer-style">
+                        <option value="bars">Bars</option>
+                        <option value="circle">Circle</option>
+                        <option value="particles">Particles</option>
+                        <option value="waveform">Waveform</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label for="visualizer-color">Visualizer Color</label>
+                    <input type="color" id="visualizer-color" value="#9d4edd">
+                </div>
+                <div class="setting-item">
+                    <label for="visualizer-reactivity">Visualizer Reactivity</label>
+                    <input type="range" id="visualizer-reactivity" min="1" max="10" step="0.1" value="5">
+                    <span id="visualizer-reactivity-value">5</span>
+                </div>
+                <div class="setting-item">
+                    <label for="visualizer-smoothing">Visualizer Smoothing</label>
+                    <input type="range" id="visualizer-smoothing" min="0" max="0.95" step="0.01" value="0.5">
+                    <span id="visualizer-smoothing-value">0.5</span>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3>Subtitles</h3>
+                <div class="setting-item">
+                    <label>Enable Subtitles</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="subtitle-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label for="subtitle-size">Subtitle Size</label>
+                    <input type="range" id="subtitle-size" min="12" max="32" value="16">
+                    <span id="subtitle-size-value">16px</span>
+                </div>
+                <div class="setting-item">
+                    <label for="subtitle-color">Subtitle Color</label>
+                    <input type="color" id="subtitle-color" value="#ffffff">
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3>Background</h3>
+                <div class="setting-item">
+                    <label>Use Custom Backgrounds</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="custom-background-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label for="background-blur">Blur</label>
+                    <input type="range" id="background-blur" min="0" max="20" value="10">
+                    <span id="background-blur-value">10</span>
+                </div>
+                <div class="setting-item">
+                    <label for="background-opacity">Opacity</label>
+                    <input type="range" id="background-opacity" min="0" max="100" value="75">
+                    <span id="background-opacity-value">75</span>
+                </div>
+                <div class="setting-item">
+                    <label for="background-image">Background Image</label>
+                    <input type="file" id="background-image" accept="image/*">
+                </div>
+                <div class="setting-item">
+                    <label for="background-folder">Background Folder</label>
+                    <input type="file" id="background-folder" webkitdirectory directory multiple>
+                </div>
+                <div class="setting-item">
+                    <button id="remove-background" style="display: none;">Remove Background</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3>Themes</h3>
+                <div class="theme-grid">
+                    <div class="theme-option" data-theme="dark-purple">
+                        <div class="theme-preview dark-purple"></div>
+                        <span>Dark Purple</span>
+                    </div>
+                    <div class="theme-option" data-theme="ocean">
+                        <div class="theme-preview ocean"></div>
+                        <span>Ocean</span>
+                    </div>
+                    <div class="theme-option" data-theme="forest">
+                        <div class="theme-preview forest"></div>
+                        <span>Forest</span>
+                    </div>
+                    <div class="theme-option" data-theme="sunset">
+                        <div class="theme-preview sunset"></div>
+                        <span>Sunset</span>
+                    </div>
+                    <div class="theme-option" data-theme="midnight">
+                        <div class="theme-preview midnight"></div>
+                        <span>Midnight</span>
+                    </div>
+                    <div class="theme-option" data-theme="aurora">
+                        <div class="theme-preview aurora"></div>
+                        <span>Aurora</span>
+                    </div>
+                    <div class="theme-option" data-theme="nordic">
+                        <div class="theme-preview nordic"></div>
+                        <span>Nordic</span>
+                    </div>
+                    <div class="theme-option" data-theme="desert">
+                        <div class="theme-preview desert"></div>
+                        <span>Desert</span>
+                    </div>
+                    <div class="theme-option" data-theme="neon">
+                        <div class="theme-preview neon"></div>
+                        <span>Neon</span>
+                    </div>
+                </div>
+            </div>
+            <button id="close-settings" class="control-btn">✕</button>
+        </div>
+    </div>
+
+    <script src="js/player.js"></script>
+</body>
+</html>

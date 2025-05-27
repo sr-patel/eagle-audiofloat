@@ -1,0 +1,17 @@
+{
+    "id": "78b654b7-0fe8-4bdd-b861-925ad1b526fa",
+    "version": "1.0.0",
+    "platform": "all",
+    "arch": "all",
+    "name": "Audiofloat",
+    "logo": "/logo.png",
+    "keywords": ["audio", "player", "music"],
+    "devTools": false,
+    "main": {
+        "url": "index.html",
+        "width": 800,
+        "minWidth": 400,
+        "height": 600,
+        "minHeight": 400
+    }
+}
