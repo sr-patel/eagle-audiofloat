@@ -630,7 +630,9 @@ class AudioPlayer {
                 file.type === 'audio/ogg' ||
                 file.type === 'audio/mp3' ||
                 file.type === 'audio/x-m4a' ||
-                file.type === 'audio/m4a'
+                file.type === 'audio/m4a' ||
+                file.type === 'audio/opus' ||
+                file.type === 'audio/x-opus'
             );
             
             if (audioFiles.length > 0) {
@@ -950,13 +952,16 @@ class AudioPlayer {
                               file.ext.toLowerCase() === 'mp3' || 
                               file.ext.toLowerCase() === 'wav' || 
                               file.ext.toLowerCase() === 'ogg' ||
+                              file.ext.toLowerCase() === 'opus' ||
                               (file.type && (
                                   file.type === 'audio/mpeg' || 
                                   file.type === 'audio/wav' || 
                                   file.type === 'audio/ogg' ||
                                   file.type === 'audio/mp3' ||
                                   file.type === 'audio/x-m4a' ||
-                                  file.type === 'audio/m4a'
+                                  file.type === 'audio/m4a' ||
+                                  file.type === 'audio/opus' ||
+                                  file.type === 'audio/x-opus'
                               ));
                 console.log(`File ${file.name} is audio:`, isAudio);
                 return isAudio;
